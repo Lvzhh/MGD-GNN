@@ -1,0 +1,3 @@
+
+# train predicate extraction model
+CUDA_VISIBLE_DEVICES=7 python train_predicate_span.py --train_file data/train.json --dev_file data/dev.json --test_file data/test.json --gat_nhead 5 --gat_layer 3 --strategy n --batch_size 50 --lr 0.001 --lr_decay 0.01 --use_clip False --optimizer Adam --droplstm 0 --dropout 0.6 --dropgat 0.3 --gaz_dropout 0.4 --norm_char_emb True --norm_gaz_emb False --param_stored_directory ./logs/debug_rel_pos --lstm_layer 1 --gat_nhidden 60 --data_stored_directory ./logs/generated_data_relation/ --positive_weight 3
