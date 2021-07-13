@@ -1,10 +1,8 @@
 import sys
-sys.path.insert(0, "../chinese-openie")
 
 from utils.data import Data
 from utils.batchify import batchify
 from utils.config import get_args
-from utils.metric import get_ner_fmeasure
 from model.bilstm_gat_crf import BLSTM_GAT_CRF, PredicateExtractionModel, PredicateSpanScoreModel
 import os
 import numpy as np
@@ -19,11 +17,10 @@ import gc
 import json
 import collections
 from tqdm import tqdm, trange
-from metric import entity_evaluate, predicate_evaluate
+from utils.metric import entity_evaluate, predicate_evaluate
 
 import sys
-sys.path.insert(0, "../chinese-openie")
-from feature_converter import get_segment_char_span
+from utils.preprocess import get_segment_char_span
 from utils.pred_candidates import LTP_model_wrapper, make_span_candidates, pred_span_candidates_filter
 import spacy
 
@@ -206,7 +203,8 @@ def evaluate(data, model, args, name):
             ("spo_spans", incomplete_spo_spans)
         ]))
     
-    with open("logs/evaluate/detailed_relation_predictions_dep.json", "w") as writer:
+    os.makedirs("logs/evaluate", exist_ok=True)
+    with open("logs/evaluate/detailed_predicate_predictions.json", "w") as writer:
         json.dump(detailed_predictions, writer, ensure_ascii=False, indent=4)
     results = predicate_evaluate(dummy_examples, example_predictions)
     matched_gold = results.pop("matched_gold")
@@ -432,14 +430,14 @@ if __name__ == '__main__':
     # torch.backends.cudnn.deterministic = True
     data = data_initialization(args)
     # model = PredicateExtractionModel(data, args)
-    with open("../Span_OIE/data/pos2index_chinese.json") as f:
+    with open("data/pos2index_chinese.json") as f:
         pos2index = json.load(f)
     args.pos2index = {"PAD" : 0}  # [PAD] pos tag -> 0
     args.pos2index.update({pos : index + 1 for pos, index in pos2index.items()})
     args.pos_tag_dim = 20
 
     model = PredicateSpanScoreModel(data, args)
-    # train(data, model, args)
+    train(data, model, args)
 
     # model.load_state_dict(torch.load("./logs/distill/3Data_param/epoch_78_metirc_0.621728488043683.model"))
     # model.load_state_dict(torch.load("./logs/debug_relData_param/epoch_57_metirc_0.41418534622134934.model"))
@@ -448,9 +446,9 @@ if __name__ == '__main__':
     # model.load_state_dict(torch.load("./logs/debug_rel_posData_param/epoch_46_metirc_0.530392782233829.model"))  # +pos_tag dep
     # model.load_state_dict(torch.load("./logs/debug_rel_pos_lstmData_param/epoch_24_metirc_0.5153417631476287.model"))  # +pos_tag lstm
     # model.load_state_dict(torch.load("./logs/debug_rel_posData_param/epoch_42_metirc_0.5206101325086155.model"))  # gat layer = 1
-    model.load_state_dict(torch.load("./logs/debug_rel_posData_param/epoch_51_metirc_0.5314275242307664.model"))  # gat layer = 3
+    # model.load_state_dict(torch.load("./logs/debug_rel_posData_param/epoch_51_metirc_0.5314275242307664.model"))  # gat layer = 3
     # model.load_state_dict(torch.load("./logs/debug_rel_posData_param/epoch_66_metirc_0.535102662910742.model"))  # gat layer = 4
-    model.to(device="cuda")
+    # model.to(device="cuda")
     # evaluate(data, model, args, "train")
     evaluate(data, model, args, "test")
     # evaluate(data, model, args, "dev")

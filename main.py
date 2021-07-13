@@ -1,10 +1,8 @@
 import sys
-sys.path.insert(0, "../chinese-openie")
 
 from utils.data import Data
 from utils.batchify import batchify
 from utils.config import get_args
-from utils.metric import get_ner_fmeasure
 from model.bilstm_gat_crf import BLSTM_GAT_CRF
 import os
 import numpy as np
@@ -19,7 +17,7 @@ import gc
 import json
 import collections
 from tqdm import tqdm
-from metric import entity_evaluate
+from utils.metric import entity_evaluate
 
 
 def data_initialization(args):

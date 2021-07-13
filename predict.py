@@ -91,7 +91,7 @@ def predict(data, model, args):
         detailed_predictions.append(example_with_prediction)
         processed_examples.add(orig_id)
 
-    output_detailed_predictions_file = os.path.join("./logs/evaluate", "detailed_entity_predictions.json")
+    output_detailed_predictions_file = os.path.join("./logs/evaluate", "detailed_argument_predictions.json")
     with open(output_detailed_predictions_file, "w") as writer:
         writer.write(json.dumps(detailed_predictions, ensure_ascii=False, indent=4) + "\n")
 
@@ -103,7 +103,7 @@ if __name__ == '__main__':
     seed = args.random_seed
 
     eval_parser = argparse.ArgumentParser()
-    eval_parser.add_argument('--gold_file', type=str, default="/data/lzh/data/SAOKE/dataset_json_s1/test.json")
+    eval_parser.add_argument('--gold_file', type=str, default="./data/test.json")
     eval_parser.add_argument('--rel_pred_file', type=str, default="/data/lzh/exp/OpenIE/chinese-openie/logs/rerun/joint/detailed_relation_predictions.json")
     eval_args = eval_parser.parse_args(unparsed)
     # torch.manual_seed(seed)
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     # Note that max_sentence_length = 250 would ignore some examples in prediction phrase
     # data.max_sentence_length = 300
 
-    merge_output_file = "./logs/evaluate/detailed_relation_predictions_with_dep.json"
+    merge_output_file = "./logs/evaluate/detailed_predicate_predictions_with_linguistic_info.json"
     print("data.max_sentence_length", data.max_sentence_length)
     merge_linguistic_info(eval_args.gold_file, eval_args.rel_pred_file, merge_output_file)
     data.generate_instance(merge_output_file, "test")
@@ -125,11 +125,11 @@ if __name__ == '__main__':
     
     # model.load_state_dict(torch.load("./logs/split_check/lstm_1Data_param/epoch_21_metirc_0.5550743739408774.model"))  # lstm
     # model.load_state_dict(torch.load("./logs/split_check/dep_1Data_param/epoch_28_metirc_0.6023347768781774.model"))  # dep
-    model.load_state_dict(torch.load("./logs/debug_depData_param/epoch_28_metirc_0.5578987008096403.model"))  # gat layer = 1
+    # model.load_state_dict(torch.load("./logs/debug_depData_param/epoch_28_metirc_0.5578987008096403.model"))  # gat layer = 1
     # model.load_state_dict(torch.load("./logs/debug_depData_param/epoch_46_metirc_0.6106194690265486.model"))  # gat layer = 3
     # model.load_state_dict(torch.load("./logs/debug_depData_param/epoch_70_metirc_0.6179627188853323.model"))  # gat layer = 4
     # model.load_state_dict(torch.load("./logs/distill/3Data_param/epoch_75_metirc_0.6207870457540953.model"))
-    # model.load_state_dict(torch.load("./logs/debug_depData_param/epoch_50_metirc_0.5869769187464815.model"))
+    model.load_state_dict(torch.load("./logs/debug_depData_param/epoch_50_metirc_0.5869769187464815.model"))
     model.to(device="cuda")
     predict(data, model, args)
     # evaluate(data, model, args, "test")

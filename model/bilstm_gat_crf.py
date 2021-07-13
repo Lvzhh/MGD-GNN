@@ -2,7 +2,7 @@ import torch.nn as nn
 import numpy as np
 import torch
 import torch.nn.functional as F
-from layer.crf import CRF
+# from layer.crf import CRF
 from layer.gatlayer import GAT, GCN, HeteGAT
 from torch.nn import CrossEntropyLoss
 from torch.nn.utils.rnn import pad_packed_sequence, pack_padded_sequence

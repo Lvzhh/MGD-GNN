@@ -1,7 +1,6 @@
 import numpy as np
 from tqdm import tqdm
-from preprocess import DataProcessor
-from feature_converter import get_segment_char_span
+from utils.preprocess import DataProcessor, get_segment_char_span
 
 
 def normalize_word(word):
