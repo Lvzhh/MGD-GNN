@@ -1,4 +1,4 @@
-from main import *
+from train_argument import *
 import argparse
 
 
@@ -129,7 +129,7 @@ if __name__ == '__main__':
     # model.load_state_dict(torch.load("./logs/debug_depData_param/epoch_46_metirc_0.6106194690265486.model"))  # gat layer = 3
     # model.load_state_dict(torch.load("./logs/debug_depData_param/epoch_70_metirc_0.6179627188853323.model"))  # gat layer = 4
     # model.load_state_dict(torch.load("./logs/distill/3Data_param/epoch_75_metirc_0.6207870457540953.model"))
-    model.load_state_dict(torch.load("./logs/debug_depData_param/epoch_50_metirc_0.5869769187464815.model"))
+    model.load_state_dict(torch.load("./logs/argumentData_param/epoch_31_metirc_0.5923554886085372.model"))
     model.to(device="cuda")
     predict(data, model, args)
     # evaluate(data, model, args, "test")
