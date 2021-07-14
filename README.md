@@ -6,6 +6,7 @@ Source code for PAKDD 2021 paper [Multi-Grained Dependency Graph Neural Network 
 
 - Python version >= 3.6
 - [PyTorch](http://pytorch.org/) version >= 1.2.0
+- [Spacy](https://spacy.io/) version >= 2.3.4
 
 
 ## Running
